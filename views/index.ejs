@@ -1,0 +1,64 @@
+<%- include("header.ejs") %>
+
+<% if (locals.newtitle && locals.newdis) { %>
+    <% console.log("I am in"); %>
+    <% titles.push(locals.newtitle); %>
+    <% dis.push(locals.newdis); %>
+<% } %>
+
+<div class="full-height-sidebar">
+    <div class="flex-grow-1">
+        <% for (let i = 0; i < titles.length; i++) { %>
+            <div class="edit-container">
+
+                <!-- Form to Handle Click -->
+                <form id="myForm-<%= i %>" action="/clicked" method="POST">
+                    <input type="hidden" name="index" value="<%= i %>">
+                    <a href="#" 
+                       onclick="document.getElementById('myForm-<%= i %>').submit(); return false;" 
+                       class="nav-link-custom">
+                        <b><%= titles[i] %></b>
+                    </a>
+                </form>
+
+                <!-- Dropdown Menu -->
+                <a href="#" role="button" id="profileDropdown-<%= i %>" data-bs-toggle="dropdown" 
+                   aria-expanded="false" onclick="event.stopPropagation();">
+                    ...
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown-<%= i %>">
+                    <li>
+                        <!-- Edit Form -->
+                        <form action="/edit" method="POST" onsubmit="event.stopPropagation();">
+                            <input type="hidden" name="idxx" value="<%= i %>">
+                            <button type="submit" class="dropdown-item">Edit</button>
+                        </form>
+                    </li>
+                    <li>
+                        <!-- Delete Form -->
+                        <form action="/delete" method="POST" onsubmit="console.log('Delete triggered:', <%= i %>); event.stopPropagation();">
+                            <input type="hidden" name="index" value="<%= i %>">
+                            <button type="submit" class="dropdown-item">Delete</button>
+                        </form>
+                    </li>
+                </ul>
+
+            </div>
+            <p><%= dis[i] %></p>
+            <hr>
+        <% } %>
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="/about" class="nav-link-custom">About</a>
+        <a href="/contact" class="nav-link-custom">Contact</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <%- include("content.ejs") %>
+    <div style="height: 2000px;"></div>
+</div>
+
+<%- include("footer.ejs") %>
